@@ -1,7 +1,7 @@
 import tkinter
 from tkinter import font
 from tkinter import ttk
-from ttkthemes import ThemedStyle #->> pip installa ttkthemes
+#from ttkthemes import ThemedStyle #->> pip installa ttkthemes
 from tkinter import messagebox
 import os
 import sqlite3 as lite
@@ -14,7 +14,18 @@ cursor = None
 db_name = "final_database.db"
 place = ""
 config_window_frame = None
+rol = None
 
+
+def main_app_admin(session_rol):
+	if connection and session_rol == "admin":
+		print(XD)
+
+
+
+
+
+##########################################################
 def reset_db_fn():
 	global connection, cursor
 	if connection:
@@ -92,11 +103,19 @@ def login_autentication(user_entry, pass_entry):
 				session_rol=cursor.fetchone()
 				if session_rol:
 					print("BIENVENIDO ADMIN!")
+					main_app_admin(session_rol)
 			else:
 				print("NO SE ENCONTRO EL USUARIO")
 		except lite.Error as e:
 			print("NO SE PUDO ENCONTRAR EL USUARIO. ERROR CODE: ", e)
-			if e==" no such table: usuarios":
+			
+			messagebox.showwarning("Error", "No se encontró el usuario")
+
+
+
+
+			# No funciona
+			if e=="no such table: usuarios":
 				print("no existe la tabla usuarios")
 	else:
 		print("NO SE PUDO CONECTAR")
@@ -204,7 +223,7 @@ def start():
 	return connection
 
 root_window_login_frame=tkinter.Tk()
-root_window_login_frame.geometry("600x400")
+root_window_login_frame.geometry("400x300")
 root_window_login_frame.resizable(0,0)
 root_window_login_frame.title("Gestor")
 root_window_login_frame.protocol("WM_DELETE_WINDOW", lambda:exit(place="login"))
@@ -212,36 +231,39 @@ root_window_login_frame.config(bg="Grey91")
 root_window_login_frame.iconbitmap("icon.ico")
 #Header
 root_window_login_header=tkinter.Label(root_window_login_frame, text="Iniciar Sesión", font=("Segoe UI", 22), bg="black", fg="white")
-root_window_login_header.place(x=0, y=0, width=600, height=75)
+root_window_login_header.place(x=0, y=0, width=400, height=50)
 #Header_happy cloud
-cloudy=tkinter.PhotoImage(file=("cloud.png"))
+cloudy=tkinter.PhotoImage(file=("smiley_cloud.png"))
 cloudy_label=tkinter.Label(root_window_login_frame, image=cloudy, bd=0)
-cloudy_label.place(x=10, y=10, width=80, height=50)
+cloudy_label.place(x=15, y=1, width=49, height=49)
 #User
 user_entry_label=tkinter.Label(root_window_login_frame, text="Nombre: ", font=("Segoe UI", 10), bg="Grey91")
-user_entry_label.place(x=50, y=130)
+user_entry_label.place(x=50, y=90)
 user_entry=tkinter.Entry(root_window_login_frame, font=("Segoe UI", 10))
-user_entry.place(x=120, y=130,  width=230, height=23)
+user_entry.place(x=120, y=90,  width=230, height=23)
 #Pass
 pass_entry_label=tkinter.Label(root_window_login_frame, text="Contraseña: ", font=("Segoe UI", 10), bg="Grey91")
-pass_entry_label.place(x=34, y=170)
+pass_entry_label.place(x=34, y=140)
 pass_entry=tkinter.Entry(root_window_login_frame, font=("Segoe UI", 10), show="*")
-pass_entry.place(x=120, y=170, width=230, height=23)
+pass_entry.place(x=120, y=140, width=230, height=23)
 #Login Button
 login_button=ttk.Button(root_window_login_frame, text='Iniciar',style="login.TButton", command=lambda:login_autentication(user_entry, pass_entry))
-login_button.place(x=125, y=250, width=150, height=50)
+login_button.place(x=125, y=190, width=150, height=50)
 #Footer
 root_window_login_footer_label=tkinter.Label(root_window_login_frame, bg="black")
-root_window_login_footer_label.place(x=0, y=350, width=600, height=50)
+root_window_login_footer_label.place(x=0, y=270, width=400, height=30)
 #Footer connection
-root_window_login_footer_connection_label=tkinter.Label(root_window_login_frame, text="Base de datos: Desconectado", font=("Segoe UI", 10, "bold"), bg="black", fg="#3b80b1")
-root_window_login_footer_connection_label.place(x=20, y=360, width=200, height=30)
+root_window_login_footer_connection_label=tkinter.Label(root_window_login_frame, text="Base de datos: Desconectado", font=("Segoe UI", 8, "bold"), bg="black", fg="#3b80b1")
+root_window_login_footer_connection_label.place(x=10, y=275, width=150, height=20)
 #Footer-config-button
-footer_config_button=tkinter.Button(root_window_login_frame, text="Herramientas", bg="black", fg="#3b80b1", bd=0, command=config_button_fn, font=("Segoe UI", 12))
-footer_config_button.place(x=480, y=360, width=100, height=30)
+footer_config_button=tkinter.Button(root_window_login_frame, text="Herramientas", bg="black", fg="#3b80b1", bd=0, command=config_button_fn, font=("Segoe UI", 8))
+footer_config_button.place(x=310, y=272, width=80, height=25)
 start()
 
-style = ThemedStyle()
+#style = ThemedStyle()
+
+style = ttk.Style()
+
 style.theme_use('vista')
 print(style.theme_names())  # Lista de temas disponibles
 style.configure('login.TButton', font=('Segoe UI', 20, "bold"))
